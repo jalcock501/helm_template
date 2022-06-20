@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/instance: {{ "{{" }} .Values.{{ cookiecutter.chart_name }}.name {{ "}}" }}
+    app.kubernetes.io/name: {{ "{{" }} .Values.{{ cookiecutter.chart_name }}.name {{ "}}" }}
+  name: {{ "{{" }} .Values.{{ cookiecutter.chart_name }}.name {{ "}}"}}
+  namespace: {{ "{{" }} .Values.{{ cookiecutter.chart_name }}.namespace {{ "}}"}}
+spec:
+  replicas: {{ "{{" }} .Values.{{ cookiecutter.chart_name }}.replicas {{ "}}"}}
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: {{ "{{" }} .Values.{{ cookiecutter.chart_name }}.name {{ "}}"}}
+      app.kubernetes.io/name: {{ "{{" }} .Values.{{ cookiecutter.chart_name }}.name{{ "}}"}}{{"-{{"}} .Release.Name {{ "}}" }} 
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: {{ "{{" }} .Values.{{ cookiecutter.chart_name }}.name {{ "}}"}}
+        app.kubernetes.io/name: {{ "{{" }} .Values.{{ cookiecutter.chart_name }}.name {{ "}}"}}
+    spec:
+      containers:
+        - name: {{ "{{" }} .Values.{{ cookiecutter.chart_name }}.name {{ "}}"}}
+          {{"{{"}} if (default .Values.minikube false) - {{ "}}" }}
+          imagePullPolicy: Never
+          image: {{ "{{" }} .Values.{{ cookiecutter.chart_name }}.name {{ "}}"}}
+          {{ "{{" }} else {{ "}}" }}
+          image: {{ "{{" }} .Values.{{ cookiecutter.chart_name }}.image {{ "}}"}}{{":{{"}} .Chart.Version {{"}}"}}
+          {{"{{"}} end {{"-}}"}}
+          resources:
+            requests:
+              memory: "{{ cookiecutter.requested_mem }}Mi"
+              cpu: "{{ cookiecutter.requested_cpu }}m"
+            limits:
+              memory: "{{ cookiecutter.limits_mem }}Mi"
+              cpu: "{{ cookiecutter.limits_cpu }}m"
+          ports:
+            - containerPort: {{ "{{" }} .Values.{{ cookiecutter.chart_name }}.port {{ "}}" }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ "{{" }} .Values.{{ cookiecutter.chart_name }}.port {{ "}}" }}
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ "{{" }} .Values.{{ cookiecutter.chart_name }}.port {{ "}}" }}
+            initialDelaySeconds: 5
+            periodSeconds: 5
+      imagePullSecrets:
+        - name: gitlab-registry-auth
+      terminationGracePeriodSeconds: 5
+      restartPolicy: Always

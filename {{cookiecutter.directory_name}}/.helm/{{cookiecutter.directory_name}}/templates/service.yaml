@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ "{{" }} .Values.{{ cookiecutter.chart_name }}.name {{ "}}" }}
+  namespace: {{ "{{" }} .Values.{{ cookiecutter.chart_name }}.namespace {{ "}}" }}
+  labels:
+    app.kubernetes.io/name: {{ "{{" }} .Values.{{ cookiecutter.chart_name }}.name {{ "}}" }}
+    app.kubernetes.io/instance: {{ "{{" }} .Values.{{ cookiecutter.chart_name }}.name {{ "}}" }}
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: {{ "{{" }} .Values.{{ cookiecutter.chart_name }}.port {{ "}}" }}
+  selector:
+    app.kubernetes.io/name: {{ "{{" }} .Values.{{ cookiecutter.chart_name }}.name {{ "}}" }}
+    app.kubernetes.io/instance: {{ "{{" }} .Values.{{ cookiecutter.chart_name }}.name {{ "}}" }}

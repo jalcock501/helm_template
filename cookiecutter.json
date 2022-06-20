@@ -1,0 +1,11 @@
+{
+    "directory_name": "MyProjectName",
+    "chart_name": "MyChartName",
+    "chart_namespace": "MyChartNameSpace",
+    "chart_description": "MyChartDescription",
+    "image": "MyImage",
+    "requested_mem": 128,
+    "requested_cpu": 512,
+    "limits_mem": 256,
+    "limits_cpu": 768
+}

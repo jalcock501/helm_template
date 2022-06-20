@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ "{{" }} .Values.{{ cookiecutter.chart_name }}.name {{ "}}" }}
+  namespace: {{ "{{" }} .Values.{{ cookiecutter.chart_name }}.namespace {{ "}}" }}
+  annotations:
+      kubernetes.io/ingress.class: {{"{{"}} .Values.ingress {{"}}"}}
+spec:
+  rules:
+    - host: {{"{{"}} .Values.{{ cookiecutter.chart_name }}.url {{ "}}" }}
+      http:
+        paths:
+          - backend:
+              service:
+                name: {{ "{{" }} .Values.{{ cookiecutter.chart_name }}.name {{ "}}" }}
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - {{"{{"}} .Values.{{ cookiecutter.chart_name }}.url {{ "}}" }}
+        - "*.public.thmon.ukfast.co.uk"

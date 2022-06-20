@@ -1,0 +1,8 @@
+minikube: false
+name: "{{ cookiecutter.chart_name }}"
+namespace: "{{ cookiecutter.chart_namespace }}"
+ingress: "nginx-ingress"
+
+image: "{{ cookiecutter.image }}"
+replicas: 1
+port: 80
